@@ -1,61 +1,27 @@
-# This is a sample Python script.
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-import re
-# tentativa 1
+####________________________________________________Conversão automática de palavras para itálico_________________________________________________#####
 
-species_names = ['Panthera leo','Felix catus','Homo sapiens','Homo habilis']
-novos_nomes = (f'\x1B[3m {species_names} \x1B[0m')
-print(novos_nomes)   #convertendo array inteiro para itálico
+## recebimento dos bancos
 
-# --------------------------------------------------------------------------------------------------------------------#
-# tentativa 2
-texto = 'Panthera leo'
+genero = ['Salmonela','Bacillus']   ## a célula de gêneros deve vir aqui
+especie =['enterica','cereus']  ## a célula de epíteteto específico deve vir aqui
 
-for item in species_names:
-    if texto == item:
-        item = (f'\x1B[3m {item} \x1B[0m')
-        print(item) #imprimindo apenas um item
+## recebimento do input
 
-# após isso, varrer o array buscando pelas similaridades do que a gestora digitou.
+text = ['Salmonela enterica e Bacillus cereus group foram encontrados'] ## a célula do texto deve vir aqui
 
-
-#---------------------------------------------------------------------------------------------------------------------#
-# tentativa 3
-
-banco = ["Panthera leo"]
-array = ["O nome científico do leão é Panthera leo"]
-
-banco = ";".join(banco)
-banco = banco.split()
-
-
-array = ";".join(array)
-array = array.split()
-
-print(banco)
-print(array)
-
-x =0
-for item in banco:
-    for i in array:
-        if item == i:
-            array = " ".join(array)
-            array = array.replace(i, (f'\x1B[3m {i} \x1B[0m'))
-            print(array)
-
-
-####________________________________________________nova_tentativa_________________________________________________#####
-
-genero = ['Arabdopsis','Australopitechus','Canis','Homo','Listeria','Bacillus','Zea','Gorilla']
-especie =['thaliana','afarensis','lupus','sapiens','monocytogens','cereus','mays','gorilla']
-
-text = ['O nome da especie estudada é Arabdopsis thaliana , o lobo se chama Canis lupus , o humano se chama Homo sapiens , o gorila se chama Gorilla gorilla , a Listeria monocytogens é um microrganismo. Bacillus cereus é utilizado em lacteos. O milho se chama Zea mays . Australopitechus afarensis é um ancestral da espécie humana.']
+# tratamento do input
+   #transformacao do array em string
 
 text = ",".join(text)
+
+   #conversao para array
+
 text = text.split()
-print(text)
+
+#print(text)
+
+#tratamento dos generos, comparando os generos presentes no input de texto com os generos presentes no banco
 
 for palavra in text:
     for gen in genero:
@@ -64,18 +30,33 @@ for palavra in text:
             text[x] = (f'\x1B[3m{palavra}\x1B[0m')
         ##print(text)
 
+# tratamento das especies, comparando as especies presentes no input com as especies presentes no banco
+
 for subs in text:
     for spp in especie:
         if subs == spp:
             y = text.index(subs)
             text[y] = (f'\x1B[3m{subs}\x1B[0m')
-            texto_final = " ".join(text)
+            texto_final = " ".join(text)    #aqui eu converto o código para string e afasto as pontuacoes
             texto_final = texto_final.replace(",", " ,")
-            texto_final = texto_final.replace(" . ", ". ")
-            texto_final = texto_final.replace(" .", ". ")
+            texto_final = texto_final.replace(".", " .")
+            texto_final = texto_final.replace(";", " ;")
+            texto_final=texto_final.split()
+
+# tratamento das pontuacoes que poderiam estar juntas do texto e ocasionar problemas na conversao das palavras
+
+for newspp in texto_final:
+    for newItembank in especie:
+        if newspp == newItembank:
+            z = texto_final.index(newspp)
+            texto_final[z]=(f'\x1B[3m{newspp}\x1B[0m')
+
+texto_final = " ".join(texto_final)
+texto_final = texto_final.replace(" ,", ",")
+texto_final = texto_final.replace(" .", ". ")
+texto_final = texto_final.replace(" ;", ";")
 
 print(texto_final)
-
 
 
 
